@@ -1,5 +1,24 @@
-from util import average_sample
-from util import standard_deviation
+import matplotlib.pyplot as plt
+
+
+def average_sample(data):
+    summary = 0
+    n = len(data)
+    for i in range(n):
+        summary += data[i]
+
+    return summary / n
+
+
+def standard_deviation(data):
+    average = average_sample(data)
+
+    n = len(data)
+    summary2 = 0
+    for i in range(n):
+        summary2 += (data[i] - average) ** 2
+
+    return summary2 / n
 
 
 def work5(data):
@@ -18,6 +37,48 @@ def work5(data):
 
     # Среднеквадратическое отклонение
     print('Среднеквадратическое отклонение:', standard_deviation(data))
+
+    # Эмперическая функция распределения
+    def empirical_distribution_function(x):
+        n = len(data)
+        summary = 0
+        for i in range(n):
+            if data[i] <= x:
+                summary += 1
+        return summary / n
+
+    # График эмперической функции распределения
+    plt.plot(data, [empirical_distribution_function(x) for x in data])
+    plt.title('График эмперической функции распределения')
+    plt.show()
+
+    # Гистограмма и полигон частот группированных данных
+    # группировка данных
+
+    # количество групп
+    k = 10
+    # ширина группы
+    h = (max_value - min_value) / k
+    # границы групп
+    borders = [min_value + h * i for i in range(k + 1)]
+    # группы
+    groups = [[] for _ in range(k)]
+    for x in data:
+        for i in range(k):
+            if borders[i] <= x < borders[i + 1]:
+                groups[i].append(x)
+                break
+    # частоты групп
+    frequencies = [len(group) for group in groups]
+
+    # график гистограммы
+    plt.bar(borders[:-1], frequencies, width=h)
+    plt.title('Гистограмма частот')
+    plt.show()
+    # график полигона частот
+    plt.plot(borders[:-1], frequencies)
+    plt.title('Полигон частот')
+    plt.show()
 
 
 if __name__ == '__main__':
